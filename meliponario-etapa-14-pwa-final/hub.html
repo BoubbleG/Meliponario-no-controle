@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fffaf0" />
+  <title>Meu Meliponário — Ficha da Colônia</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="device-shell">
+    <div class="app" id="app">
+      <header class="topbar" id="globalTopbar">
+        <button class="brand-block tap" id="apiaryPicker" aria-label="Trocar meliponário">
+          <span class="brand-mark" id="brandMark"></span>
+          <span class="brand-copy">
+            <span class="brand-kicker">MEU MELIPONÁRIO</span>
+            <span class="brand-place"><span id="apiaryName">Meliponário Principal</span><span id="chevDown"></span></span>
+          </span>
+        </button>
+        <button class="icon-button tap" id="notificationButton" aria-label="Notificações">
+          <span id="bellIcon"></span><span class="notification-dot" id="notificationDot"></span>
+        </button>
+      </header>
+
+      <main class="page page-home" id="homePage" aria-hidden="true">
+        <section class="welcome reveal">
+          <p class="welcome-kicker">Bom dia, <span id="userName">Fabrício</span> <span aria-hidden="true">☀️</span></p>
+          <h1>Como estão suas<br><span>abelhas hoje?</span></h1>
+        </section>
+
+        <section class="hero-card reveal delay-1" aria-label="Resumo do meliponário">
+          <div class="hero-glow"></div>
+          <img class="hero-art" src="./assets/bee-flower.webp" alt="" />
+          <div class="hero-content">
+            <div class="hero-eyebrow">VISÃO GERAL</div>
+            <div class="hero-count"><strong id="colonyCount">32</strong><span>colônias<br>ativas</span></div>
+            <div class="status-grid">
+              <button class="status-pill tap" data-status="healthy"><span class="status-dot good"></span><strong id="healthyCount">27</strong><small>Saudáveis</small></button>
+              <button class="status-pill tap" data-status="attention"><span class="status-dot warn"></span><strong id="attentionCount">3</strong><small>Atenção</small></button>
+              <button class="status-pill tap" data-status="management"><span class="status-dot bad"></span><strong id="managementCount">2</strong><small>Manejo</small></button>
+            </div>
+            <button class="hero-link tap" id="viewColonies">Ver todas as colônias <span id="arrowRight1"></span></button>
+          </div>
+        </section>
+
+        <section class="section reveal delay-2">
+          <div class="section-heading">
+            <div><p class="section-kicker">FOCO DE HOJE</p><h2>Prioridades</h2></div>
+            <button class="count-chip tap" id="priorityCount">3 ações</button>
+          </div>
+          <div class="priority-track" id="priorityTrack"></div>
+          <div class="pager" id="priorityPager"></div>
+        </section>
+
+        <section class="section reveal delay-3">
+          <div class="section-heading compact"><div><p class="section-kicker">ATALHOS</p><h2>Registro rápido</h2></div></div>
+          <div class="quick-grid" id="quickGrid"></div>
+        </section>
+
+        <section class="section reveal delay-4">
+          <div class="week-card">
+            <div class="week-copy">
+              <div class="week-title-row"><span class="week-icon" id="sparkleIcon"></span><span>Ritmo da semana</span></div>
+              <h3 id="weekTitle">8 de 11 manejos concluídos</h3>
+              <p id="insightBody">84% das colônias estão saudáveis.</p>
+              <div class="progress"><span id="weekProgress"></span></div>
+            </div>
+            <div class="ring" id="weekRing"><div><strong id="weekPercent">73%</strong><small>feito</small></div></div>
+          </div>
+        </section>
+
+        <section class="section reveal delay-5">
+          <div class="section-heading compact">
+            <div><p class="section-kicker">AGENDA</p><h2>Próximos manejos</h2></div>
+            <button class="text-button tap" id="seeAgenda">Ver agenda</button>
+          </div>
+          <div class="schedule-card" id="scheduleList"></div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </main>
+
+      <main class="page colonies-page" id="coloniesPage">
+        <section class="colonies-intro reveal">
+          <div class="colonies-title-row">
+            <div>
+              <p class="section-kicker">SUAS ABELHAS</p>
+              <h1>Minhas colônias</h1>
+              <p class="colonies-subtitle"><span id="visibleColoniesCount">32</span> colônias neste meliponário</p>
+            </div>
+            <button class="add-colony-button tap" id="addColonyButton" aria-label="Cadastrar colônia"><span id="addColonyIcon"></span></button>
+          </div>
+        </section>
+
+        <section class="colony-overview reveal delay-1" aria-label="Resumo das colônias">
+          <div class="overview-decoration"></div>
+          <img src="./assets/bee-flower.webp" class="overview-art" alt="" />
+          <div class="overview-main">
+            <span class="overview-label">SAÚDE DO MELIPONÁRIO</span>
+            <strong><span id="healthPercent">84</span>%</strong>
+            <small>das colônias estão saudáveis</small>
+          </div>
+          <div class="overview-stats">
+            <button class="overview-stat tap" data-colony-status="healthy"><span class="mini-dot healthy"></span><strong id="overviewHealthy">27</strong><small>Saudáveis</small></button>
+            <button class="overview-stat tap" data-colony-status="attention"><span class="mini-dot attention"></span><strong id="overviewAttention">3</strong><small>Atenção</small></button>
+            <button class="overview-stat tap" data-colony-status="management"><span class="mini-dot management"></span><strong id="overviewManagement">2</strong><small>Manejo</small></button>
+          </div>
+        </section>
+
+        <section class="colony-tools reveal delay-2">
+          <div class="search-row">
+            <label class="search-box" for="colonySearch">
+              <span id="searchIcon"></span>
+              <input id="colonySearch" type="search" inputmode="search" autocomplete="off" placeholder="Buscar nome, número ou espécie" />
+              <button class="search-clear tap" id="searchClear" type="button" aria-label="Limpar busca"><span id="searchClearIcon"></span></button>
+            </label>
+            <button class="filter-button tap" id="openFilters" aria-label="Filtros"><span id="filterIcon"></span><i id="filterBadge">0</i></button>
+          </div>
+
+          <div class="status-chips" id="statusChips">
+            <button class="filter-chip active tap" data-status-filter="all">Todas <span id="chipAll">32</span></button>
+            <button class="filter-chip tap" data-status-filter="healthy"><i class="chip-dot healthy"></i>Saudáveis</button>
+            <button class="filter-chip tap" data-status-filter="attention"><i class="chip-dot attention"></i>Atenção</button>
+            <button class="filter-chip tap" data-status-filter="management"><i class="chip-dot management"></i>Manejo</button>
+          </div>
+
+          <div class="species-line">
+            <div class="species-scroll" id="speciesChips"></div>
+            <button class="view-toggle tap" id="viewToggle" aria-label="Alternar visualização"><span id="viewIcon"></span></button>
+          </div>
+        </section>
+
+        <section class="attention-section reveal delay-3" id="attentionSection">
+          <div class="section-heading compact colonies-heading">
+            <div><p class="section-kicker">PRECISAM DE VOCÊ</p><h2>Atenção primeiro</h2></div>
+            <button class="text-button tap" id="attentionAll">Ver todas</button>
+          </div>
+          <div class="attention-carousel" id="attentionCarousel"></div>
+        </section>
+
+        <section class="section colony-list-section reveal delay-4">
+          <div class="section-heading compact colonies-heading">
+            <div>
+              <p class="section-kicker" id="listKicker">TODAS</p>
+              <h2 id="listTitle">Suas colônias</h2>
+            </div>
+            <button class="sort-button tap" id="sortButton"><span id="sortIcon"></span><span id="sortLabel">Prioridade</span></button>
+          </div>
+          <div class="result-meta" id="resultMeta"></div>
+          <div class="colonies-list" id="coloniesList"></div>
+          <div class="empty-colonies" id="emptyColonies" hidden>
+            <div class="empty-bee" id="emptyBee"></div>
+            <h3>Nenhuma colônia encontrada</h3>
+            <p>Tente remover alguns filtros ou buscar outro nome.</p>
+            <button class="btn-primary tap" id="clearAllFilters">Limpar filtros</button>
+          </div>
+        </section>
+
+        <div class="bottom-spacer"></div>
+      </main>
+
+
+      <main class="page detail-page is-hidden" id="detailPage" aria-hidden="true">
+        <header class="detail-topbar">
+          <button class="detail-icon-button tap" id="detailBack" aria-label="Voltar"><span id="detailBackIcon"></span></button>
+          <div class="detail-topbar-copy">
+            <span>FICHA DA COLÔNIA</span>
+            <strong id="detailTopName">Jataí #14</strong>
+          </div>
+          <button class="detail-icon-button tap" id="detailMore" aria-label="Mais opções"><span id="detailMoreIcon"></span></button>
+        </header>
+
+        <section class="detail-section species-showcase reveal delay-1" aria-label="Identificação e imagem da espécie">
+          <article class="species-portrait-card">
+            <div class="species-portrait-copy">
+              <span class="profile-status" id="detailStatus"><i></i>Saudável</span>
+              <p class="profile-species species-label" id="detailSpecies">JATAÍ</p>
+              <h2 id="detailName">Jataí #14</h2>
+              <p id="speciesPortraitScientific">Tetragonisca angustula</p>
+              <div class="species-card-location"><span id="detailPinIcon"></span><span id="detailLocal">Varanda</span></div>
+              <div class="species-card-tags">
+                <span id="detailOrigin">Captura</span>
+                <span id="detailBox">Caixa INPA</span>
+              </div>
+            </div>
+            <div class="species-portrait-media">
+              <img id="speciesPortraitImage" src="./assets/jatai.webp" alt="Jataí em flor amarela" />
+              <span class="species-portrait-glow"></span>
+            </div>
+          </article>
+        </section>
+
+        <section class="detail-section reveal delay-1">
+          <div class="section-heading detail-section-heading">
+            <div><p class="section-kicker">ESTADO ATUAL</p><h2>Como ela está agora?</h2></div>
+            <span class="updated-chip" id="detailUpdated">Atualizado há 8 dias</span>
+          </div>
+          <div class="health-grid">
+            <article class="health-card health-good">
+              <span class="health-icon" id="queenIcon"></span>
+              <span class="health-copy"><small>Rainha</small><strong id="detailQueen">Vista</strong><em id="detailQueenHint">na última inspeção</em></span>
+            </article>
+            <article class="health-card health-good">
+              <span class="health-icon" id="populationIcon"></span>
+              <span class="health-copy"><small>População</small><strong id="detailPopulation">Forte</strong><em>movimento estável</em></span>
+            </article>
+            <article class="health-card health-good">
+              <span class="health-icon" id="broodIcon"></span>
+              <span class="health-copy"><small>Cria</small><strong id="detailBrood">Boa</strong><em id="detailBroodHint">distribuição uniforme</em></span>
+            </article>
+            <article class="health-card" id="foodHealthCard">
+              <span class="health-icon" id="foodIcon"></span>
+              <span class="health-copy"><small>Alimento</small><strong id="detailFood">Normal</strong><em id="detailFoodHint">reserva adequada</em></span>
+            </article>
+          </div>
+        </section>
+
+        <section class="detail-section reveal delay-2">
+          <article class="next-management-card" id="nextManagementCard">
+            <div class="management-head">
+              <div>
+                <p class="section-kicker">PRÓXIMO MANEJO</p>
+                <h2 id="nextManagementTitle">Inspeção geral</h2>
+                <p id="nextManagementMeta">Programada para daqui a 7 dias</p>
+              </div>
+              <div class="management-date" id="nextManagementDate"><strong>27</strong><span>SET</span></div>
+            </div>
+            <div class="management-note">
+              <span id="managementNoteIcon"></span>
+              <p>Revisar população, cria, alimento e condição geral da caixa.</p>
+            </div>
+            <div class="management-actions">
+              <button class="btn-primary detail-primary tap" id="registerManagement">Registrar manejo <span id="registerManagementIcon"></span></button>
+              <button class="detail-secondary tap" id="rescheduleManagement"><span id="calendarSmallIcon"></span></button>
+            </div>
+          </article>
+        </section>
+
+        <section class="detail-section reveal delay-3">
+          <div class="section-heading detail-section-heading">
+            <div><p class="section-kicker">ÚLTIMA INSPEÇÃO</p><h2 id="lastInspectionTitle">Tudo dentro do esperado</h2></div>
+            <button class="text-button tap" id="inspectionDetails">Ver detalhes</button>
+          </div>
+          <article class="inspection-summary">
+            <div class="inspection-date-line">
+              <span class="inspection-round-icon" id="inspectionRoundIcon"></span>
+              <div><strong id="lastInspectionDate">12 de setembro</strong><small id="lastInspectionAge">há 8 dias</small></div>
+              <span class="inspection-score" id="inspectionScore">Boa</span>
+            </div>
+            <p class="inspection-note" id="lastInspectionNote">Boa população, cria uniforme e atividade normal na entrada.</p>
+            <div class="inspection-mini-grid">
+              <div><span>Rainha</span><strong id="lastQueen">Vista</strong></div>
+              <div><span>População</span><strong id="lastPopulation">Forte</strong></div>
+              <div><span>Cria</span><strong id="lastBrood">Boa</strong></div>
+              <div><span>Alimento</span><strong id="lastFood">Normal</strong></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="detail-section reveal delay-4">
+          <div class="section-heading detail-section-heading">
+            <div><p class="section-kicker">LINHA DO TEMPO</p><h2>Histórico recente</h2></div>
+            <button class="text-button tap" id="openHistory">Ver tudo</button>
+          </div>
+          <div class="mini-timeline" id="miniTimeline"></div>
+        </section>
+
+        <section class="detail-section reveal delay-5">
+          <div class="section-heading detail-section-heading">
+            <div><p class="section-kicker">IDENTIFICAÇÃO</p><h2>Dados da colônia</h2></div>
+            <button class="text-button tap" id="editColony">Editar</button>
+          </div>
+          <article class="colony-data-card">
+            <div class="data-row"><span class="data-icon" id="dataOriginIcon"></span><div><small>Origem</small><strong id="dataOrigin">Captura</strong></div></div>
+            <div class="data-row"><span class="data-icon" id="dataBoxIcon"></span><div><small>Tipo de caixa</small><strong id="dataBox">INPA</strong></div></div>
+            <div class="data-row"><span class="data-icon" id="dataPlaceIcon"></span><div><small>Local</small><strong id="dataPlace">Varanda</strong></div></div>
+            <div class="data-row"><span class="data-icon" id="dataCodeIcon"></span><div><small>Identificação</small><strong id="dataCode">COL-C04</strong></div></div>
+          </article>
+        </section>
+
+
+        <section class="detail-section lineage-section reveal delay-5" id="lineageSection" hidden>
+          <div class="section-heading detail-section-heading">
+            <div><p class="section-kicker">LINHAGEM</p><h2>Família desta colônia</h2></div>
+            <button class="text-button tap" id="openDivisionFamily">Ver árvore</button>
+          </div>
+          <div class="lineage-card" id="lineageCard"></div>
+        </section>
+
+        <section class="detail-bottom-actions reveal delay-5">
+          <button class="detail-action-outline tap" id="historyBottom"><span id="historyBottomIcon"></span><strong>Histórico</strong><small>Ver linha do tempo</small></button>
+          <button class="detail-action-main tap" id="manageBottom"><span id="manageBottomIcon"></span><strong>Registrar manejo</strong><small>Inspeção, alimento e mais</small></button>
+        </section>
+        <div class="bottom-spacer"></div>
+      </main>
+
+
+
+      <main class="page history-page is-hidden" id="historyPage" aria-hidden="true">
+        <header class="history-topbar">
+          <button class="detail-icon-button tap" id="historyBack" aria-label="Voltar"><span id="historyBackIcon"></span></button>
+          <div class="history-topbar-copy"><span>HISTÓRICO DA COLÔNIA</span><strong id="historyTopName">Jataí #14</strong></div>
+          <button class="detail-icon-button tap" id="historyFilterButton" aria-label="Filtrar histórico"><span id="historyFilterIcon"></span></button>
+        </header>
+
+        <section class="history-hero reveal">
+          <div class="history-hero-copy">
+            <span class="history-status" id="historyStatus"><i></i>Saudável</span>
+            <p class="section-kicker">LINHA DO TEMPO</p>
+            <h1>Tudo o que aconteceu com esta colônia</h1>
+            <p>Inspeções, alimentações, manejos e origem em uma única sequência.</p>
+          </div>
+          <div class="history-hero-image"><img id="historySpeciesImage" src="./assets/jatai.webp" alt="" /></div>
+        </section>
+
+        <section class="history-summary reveal delay-1">
+          <article><span id="historySummaryIcon1"></span><strong id="historyTotalEvents">8</strong><small>registros</small></article>
+          <article><span id="historySummaryIcon2"></span><strong id="historyInspectionCount">3</strong><small>inspeções</small></article>
+          <article><span id="historySummaryIcon3"></span><strong id="historyLastAge">8d</strong><small>desde a última</small></article>
+        </section>
+
+        <section class="history-tools reveal delay-2">
+          <div class="history-filter-scroll" id="historyFilterChips">
+            <button class="history-filter-chip active tap" data-history-filter="all">Tudo</button>
+            <button class="history-filter-chip tap" data-history-filter="inspection">Inspeções</button>
+            <button class="history-filter-chip tap" data-history-filter="feeding">Alimentação</button>
+            <button class="history-filter-chip tap" data-history-filter="management">Manejos</button>
+            <button class="history-filter-chip tap" data-history-filter="origin">Origem</button>
+          </div>
+        </section>
+
+        <section class="history-content reveal delay-3">
+          <div id="historyTimeline"></div>
+          <div class="history-empty" id="historyEmpty" hidden>
+            <span id="historyEmptyIcon"></span>
+            <h3>Nenhum registro neste filtro</h3>
+            <p>Escolha outra categoria para ver a linha do tempo.</p>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </main>
+
+
+      <main class="page agenda-page is-hidden" id="agendaPage" aria-hidden="true">
+        <section class="agenda-intro reveal">
+          <div class="agenda-title-row">
+            <div>
+              <p class="section-kicker">ORGANIZAÇÃO DO MANEJO</p>
+              <h1>Sua agenda</h1>
+              <p class="agenda-subtitle">O que precisa ser feito, sem deixar nenhuma colônia para trás.</p>
+            </div>
+            <button class="agenda-add-button tap" id="agendaAddButton" aria-label="Novo lembrete"><span id="agendaAddIcon"></span></button>
+          </div>
+        </section>
+
+        <section class="agenda-hero reveal delay-1">
+          <div class="agenda-hero-pattern"></div>
+          <div class="agenda-hero-copy">
+            <span>HOJE · 20 SET</span>
+            <h2><strong id="agendaTodayCount">2</strong> manejos para cuidar</h2>
+            <p id="agendaHeroText">Organize o dia e resolva primeiro o que está atrasado.</p>
+          </div>
+          <div class="agenda-hero-icon" id="agendaHeroCalendarIcon"></div>
+          <div class="agenda-hero-stats">
+            <button class="tap" id="agendaHeroOverdue"><strong id="agendaOverdueCount">1</strong><small>atrasado</small></button>
+            <span></span>
+            <button class="tap" id="agendaHeroWeek"><strong id="agendaWeekCount">7</strong><small>na semana</small></button>
+            <span></span>
+            <div><strong id="agendaDoneCount">0</strong><small>concluídos</small></div>
+          </div>
+        </section>
+
+        <section class="agenda-week reveal delay-2">
+          <div class="agenda-section-head"><div><p class="section-kicker">SEMANA</p><h2>20 — 26 setembro</h2></div><button class="agenda-today-link tap" id="agendaGoToday">Hoje</button></div>
+          <div class="agenda-week-strip" id="agendaWeekStrip"></div>
+        </section>
+
+        <section class="agenda-controls reveal delay-3">
+          <div class="agenda-view-tabs" id="agendaViewTabs">
+            <button class="active tap" data-agenda-view="today">Hoje</button>
+            <button class="tap" data-agenda-view="week">Semana</button>
+            <button class="tap" data-agenda-view="all">Todos</button>
+            <button class="tap" data-agenda-view="overdue">Atrasados</button>
+          </div>
+        </section>
+
+        <section class="agenda-overdue-block reveal delay-3" id="agendaOverdueBlock">
+          <div class="agenda-section-head compact"><div><p class="section-kicker danger-kicker">PRECISA DE VOCÊ</p><h2>Atrasados</h2></div><span class="agenda-alert-count" id="agendaAlertCount">1</span></div>
+          <div id="agendaOverdueList"></div>
+        </section>
+
+        <section class="agenda-list-section reveal delay-4">
+          <div class="agenda-section-head"><div><p class="section-kicker" id="agendaListKicker">HOJE</p><h2 id="agendaListTitle">Próximos manejos</h2></div><span class="agenda-list-count" id="agendaListCount">2 tarefas</span></div>
+          <div class="agenda-groups" id="agendaGroups"></div>
+          <div class="agenda-empty" id="agendaEmpty" hidden>
+            <span id="agendaEmptyIcon"></span>
+            <h3>Nada programado aqui</h3>
+            <p>Seu meliponário está em dia neste período.</p>
+            <button class="btn-primary tap" id="agendaEmptyAdd">Criar lembrete</button>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </main>
+
+      <main class="page traps-page is-hidden" id="trapsPage" aria-hidden="true">
+        <section class="traps-intro reveal">
+          <div class="traps-title-row">
+            <div>
+              <p class="section-kicker">CAPTURAS EM CAMPO</p>
+              <h1>Minhas iscas</h1>
+              <p class="traps-subtitle">Acompanhe cada isca desde a instalação até a captura.</p>
+            </div>
+            <button class="traps-add-button tap" id="trapsAddButton" aria-label="Nova isca"><span id="trapsAddIcon"></span></button>
+          </div>
+        </section>
+
+        <section class="traps-hero reveal delay-1">
+          <div class="traps-hero-pattern"></div>
+          <div class="traps-hero-copy">
+            <span>VISÃO GERAL</span>
+            <div class="traps-total-row"><strong id="trapsTotal">12</strong><p>iscas<br>instaladas</p></div>
+            <p id="trapsHeroHint">Acompanhe tempo de campo e saiba o que precisa ser verificado.</p>
+          </div>
+          <div class="trap-bottle-hero" id="trapHeroArt"></div>
+          <div class="traps-hero-stats">
+            <button class="tap" data-trap-status-short="waiting"><i class="trap-stat-dot waiting"></i><strong id="trapsWaiting">8</strong><small>Aguardando</small></button>
+            <button class="tap" data-trap-status-short="captured"><i class="trap-stat-dot captured"></i><strong id="trapsCaptured">3</strong><small>Capturadas</small></button>
+            <button class="tap" data-trap-status-short="check"><i class="trap-stat-dot check"></i><strong id="trapsCheck">1</strong><small>Verificar</small></button>
+          </div>
+        </section>
+
+        <section class="traps-attention reveal delay-2" id="trapsAttentionBlock">
+          <div class="section-heading compact traps-heading">
+            <div><p class="section-kicker danger-kicker">PRECISA DE VOCÊ</p><h2>Verificar agora</h2></div>
+            <span class="traps-alert-count" id="trapsAlertCount">1</span>
+          </div>
+          <div id="trapsAttentionList"></div>
+        </section>
+
+        <section class="traps-tools reveal delay-3">
+          <label class="trap-search-box" for="trapSearch">
+            <span id="trapSearchIcon"></span>
+            <input id="trapSearch" type="search" autocomplete="off" placeholder="Buscar isca ou local" />
+            <button class="search-clear tap" id="trapSearchClear" type="button" aria-label="Limpar busca"><span id="trapSearchClearIcon"></span></button>
+          </label>
+          <div class="trap-filter-scroll" id="trapFilterChips">
+            <button class="trap-filter-chip active tap" data-trap-filter="all">Todas <span id="trapChipAll">12</span></button>
+            <button class="trap-filter-chip tap" data-trap-filter="waiting"><i class="trap-chip-dot waiting"></i>Aguardando</button>
+            <button class="trap-filter-chip tap" data-trap-filter="check"><i class="trap-chip-dot check"></i>Verificar</button>
+            <button class="trap-filter-chip tap" data-trap-filter="captured"><i class="trap-chip-dot captured"></i>Capturadas</button>
+          </div>
+        </section>
+
+        <section class="traps-list-section reveal delay-4">
+          <div class="section-heading compact traps-heading">
+            <div><p class="section-kicker" id="trapsListKicker">EM CAMPO</p><h2 id="trapsListTitle">Suas iscas</h2></div>
+            <span class="traps-list-count" id="trapsListCount">12 iscas</span>
+          </div>
+          <div class="traps-list" id="trapsList"></div>
+          <div class="traps-empty" id="trapsEmpty" hidden>
+            <span id="trapsEmptyIcon"></span>
+            <h3>Nenhuma isca encontrada</h3>
+            <p>Tente outro filtro ou cadastre uma nova isca.</p>
+            <button class="btn-primary tap" id="trapsEmptyAdd">Cadastrar isca</button>
+          </div>
+        </section>
+        <div class="bottom-spacer"></div>
+      </main>
+
+      <main class="capture-page is-hidden" id="capturePage" aria-hidden="true">
+        <header class="capture-topbar">
+          <button class="capture-back tap" id="captureBack" aria-label="Voltar"><span id="captureBackIcon"></span></button>
+          <div class="capture-progress-wrap">
+            <div class="capture-progress-track"><span id="captureProgressBar"></span></div>
+            <small id="captureStepCounter">1 de 4</small>
+          </div>
+          <button class="capture-close tap" id="captureClose" aria-label="Fechar"><span id="captureCloseIcon"></span></button>
+        </header>
+
+        <section class="capture-shell">
+          <div class="capture-identity" id="captureIdentity"></div>
+          <div class="capture-content" id="captureContent"></div>
+        </section>
+      </main>
+
+
+      <main class="division-page is-hidden" id="divisionPage" aria-hidden="true">
+        <header class="division-topbar">
+          <button class="division-back tap" id="divisionBack" aria-label="Voltar"><span id="divisionBackIcon"></span></button>
+          <div class="division-topbar-copy"><span id="divisionTopKicker">DIVISÕES</span><strong id="divisionTopTitle">Linhas do meliponário</strong></div>
+          <button class="division-add-top tap" id="divisionAddTop" aria-label="Nova divisão"><span id="divisionAddTopIcon"></span></button>
+        </header>
+        <section class="division-shell">
+          <div id="divisionHub"></div>
+          <div id="divisionFlow" class="is-hidden"></div>
+        </section>
+      </main>
+
+      <main class="inspection-page is-hidden" id="inspectionPage" aria-hidden="true">
+        <header class="inspection-topbar">
+          <button class="inspection-back tap" id="inspectionBack" aria-label="Voltar"><span id="inspectionBackIcon"></span></button>
+          <div class="inspection-progress-wrap">
+            <div class="inspection-progress-track"><span id="inspectionProgressBar"></span></div>
+            <small id="inspectionStepCounter">1 de 6</small>
+          </div>
+          <button class="inspection-close tap" id="inspectionClose" aria-label="Fechar"><span id="inspectionCloseIcon"></span></button>
+        </header>
+
+        <section class="inspection-shell" id="inspectionShell">
+          <div class="inspection-identity">
+            <div class="inspection-bee-thumb"><img id="inspectionSpeciesImage" src="./assets/jatai.webp" alt="" /></div>
+            <div><span>INSPEÇÃO</span><strong id="inspectionColonyName">Jataí #14</strong><small id="inspectionSpeciesName">Jataí</small></div>
+          </div>
+
+          <div class="inspection-content" id="inspectionContent"></div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Navegação principal">
+        <button class="nav-item tap" data-nav="home"><span id="navHome"></span><small>Início</small></button>
+        <button class="nav-item active tap" data-nav="colonies"><span id="navHive"></span><small>Colônias</small></button>
+        <div class="nav-center">
+          <button class="nav-fab tap" id="registerFab" aria-label="Registrar"><span id="navPlus"></span></button>
+          <small>Registrar</small>
+        </div>
+        <button class="nav-item tap" data-nav="agenda"><span id="navCalendar"></span><small>Agenda</small></button>
+        <button class="nav-item tap" data-nav="more"><span id="navMenu"></span><small>Mais</small></button>
+      </nav>
+
+      <div class="sheet-backdrop" id="sheetBackdrop"></div>
+      <section class="bottom-sheet" id="bottomSheet" aria-modal="true" role="dialog" aria-hidden="true">
+        <div class="sheet-handle"></div>
+        <div id="sheetContent"></div>
+      </section>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+  <script src="./app-hub.js"></script>
+</body>
+</html>
