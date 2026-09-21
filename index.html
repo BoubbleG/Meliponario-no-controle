@@ -1078,7 +1078,7 @@ const LIBRARY_RESOURCES=[
 ];
 function drivePreviewUrl(fileId){return `https://drive.google.com/file/d/${encodeURIComponent(fileId)}/preview`;}
 function driveViewUrl(fileId){return `https://drive.google.com/file/d/${encodeURIComponent(fileId)}/view?usp=sharing`;}
-function driveDownloadUrl(fileId){return `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`;}
+function driveDownloadUrl(fileId){return `https://drive.usercontent.google.com/download?id=${encodeURIComponent(fileId)}&export=download&confirm=t`;}
 const LIBRARY_ARTICLES=[
   {id:'l1',category:'species',title:'Jataí',subtitle:'Tetragonisca angustula',icon:'bee',body:'Abelha pequena e muito comum em áreas urbanas. Observe atividade de entrada, reserva de alimento e condição da cria durante os manejos.'},
   {id:'l2',category:'species',title:'Mandaçaia',subtitle:'Melipona quadrifasciata',icon:'bee',body:'Espécie robusta e bastante criada em caixas racionais. Acompanhe população, discos de cria e disponibilidade de alimento.'},
@@ -1893,7 +1893,7 @@ function renderLibraryTool(root){
   const cats=[['all','Todos','book'],['materials','PDFs','download'],['species','Espécies','bee'],['capture','Captura','trap'],['feeding','Alimentação','feeding'],['division','Divisão','division'],['pests','Pragas','occurrence'],['boxes','Caixas','box'],['plants','Floradas','sparkle']];
   const resources=(libraryCategory==='all'||libraryCategory==='materials')?LIBRARY_RESOURCES:[];
   const articles=libraryCategory==='materials'?[]:LIBRARY_ARTICLES.filter(a=>libraryCategory==='all'||a.category===libraryCategory);
-  const resourceBlock=resources.length?`<section class="tool-section library-materials-section reveal delay-2"><div class="section-heading compact"><div><p class="section-kicker">PROJETOS E BÔNUS</p><h2>Materiais em PDF</h2></div><span class="library-online-pill">Online</span></div><div class="library-resource-list">${resources.map(r=>`<article class="library-resource-card"><button class="library-resource-open tap" data-library-resource="${r.id}"><span class="library-resource-icon">${icon(r.id==='pdf-projects'?'box':r.id==='pdf-attractants'?'trap':'book')}</span><span class="library-resource-copy"><small>${esc(r.kind)}</small><strong>${esc(r.title)}</strong><em>${esc(r.subtitle)}</em></span>${icon('right')}</button><div class="library-resource-actions"><button class="tap" data-library-resource="${r.id}">${icon('book')} Visualizar</button><a class="tap" href="${driveDownloadUrl(r.fileId)}" target="_blank" rel="noopener">${icon('download')} Baixar PDF</a></div></article>`).join('')}</div><p class="library-online-note">Os PDFs estão hospedados no Google Drive e precisam de internet para abrir ou baixar.</p></section>`:'';
+  const resourceBlock=resources.length?`<section class="tool-section library-materials-section reveal delay-2"><div class="section-heading compact"><div><p class="section-kicker">PROJETOS E BÔNUS</p><h2>Materiais em PDF</h2></div><span class="library-online-pill">Online</span></div><div class="library-resource-list">${resources.map(r=>`<article class="library-resource-card"><button class="library-resource-open tap" data-library-resource="${r.id}"><span class="library-resource-icon">${icon(r.id==='pdf-projects'?'box':r.id==='pdf-attractants'?'trap':'book')}</span><span class="library-resource-copy"><small>${esc(r.kind)}</small><strong>${esc(r.title)}</strong><em>${esc(r.subtitle)}</em></span>${icon('right')}</button><div class="library-resource-actions"><button class="tap" data-library-resource="${r.id}">${icon('book')} Visualizar</button><a class="tap" href="${driveDownloadUrl(r.fileId)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" download>${icon('download')} Baixar PDF</a></div></article>`).join('')}</div><p class="library-online-note">Os PDFs estão hospedados no Google Drive e precisam de internet para abrir ou baixar.</p></section>`:'';
   const articleBlock=articles.length?`<section class="tool-section reveal delay-3"><div class="${resources.length?'section-heading compact':''}">${resources.length?'<div><p class="section-kicker">CONSULTA OFFLINE</p><h2>Guias rápidos</h2></div>':''}</div><div class="library-list">${articles.map(a=>`<button class="library-card tap" data-library-id="${a.id}"><span class="library-card-icon">${icon(a.icon)}</span><span><strong>${esc(a.title)}</strong><small>${esc(a.subtitle)}</small></span>${icon('right')}</button>`).join('')}</div></section>`:'';
   root.innerHTML=`<section class="tool-hero library-hero reveal"><div><p class="section-kicker">BIBLIOTECA</p><h1>Biblioteca de campo</h1><p>Guias rápidos offline e seus projetos em PDF reunidos no aplicativo.</p></div><span class="tool-hero-icon">${icon('book')}</span></section><div class="library-chips reveal delay-1">${cats.map(([k,l,ic])=>`<button class="library-chip tap ${libraryCategory===k?'active':''}" data-library-cat="${k}">${icon(ic)} ${l}</button>`).join('')}</div>${resourceBlock}${articleBlock}<div class="bottom-spacer"></div>`;
   $$('[data-library-cat]').forEach(b=>b.onclick=()=>{libraryCategory=b.dataset.libraryCat;renderLibraryTool(root)});
@@ -1905,7 +1905,7 @@ function openLibraryResource(id){const r=LIBRARY_RESOURCES.find(x=>x.id===id);if
 function renderLibraryPdf(root){
   const r=LIBRARY_RESOURCES.find(x=>x.id===libraryResourceId)||LIBRARY_RESOURCES[0]; libraryResourceId=r.id;
   $('#toolsTopKicker').textContent=r.kind.toUpperCase(); $('#toolsTopTitle').textContent=r.title;
-  root.innerHTML=`<section class="pdf-viewer-shell reveal"><div class="pdf-viewer-meta"><div><span>${icon('book')}</span><div><small>${esc(r.kind)}</small><strong>${esc(r.title)}</strong></div></div><span class="pdf-online-badge">Online</span></div><div class="pdf-viewer-actions"><a class="btn-primary tap" href="${driveViewUrl(r.fileId)}" target="_blank" rel="noopener">${icon('book')} Abrir no Drive</a><a class="tool-secondary tap" href="${driveDownloadUrl(r.fileId)}" target="_blank" rel="noopener">${icon('download')} Baixar PDF</a></div><div class="pdf-frame-wrap"><iframe class="pdf-frame" src="${drivePreviewUrl(r.fileId)}" title="${esc(r.title)}" loading="eager" allow="fullscreen"></iframe><div class="pdf-frame-fallback"><strong>Não conseguiu carregar?</strong><span>Use “Abrir no Drive” acima.</span></div></div><p class="pdf-viewer-note">A visualização usa o Google Drive dentro do PWA e precisa de internet.</p></section><div class="bottom-spacer"></div>`;
+  root.innerHTML=`<section class="pdf-viewer-shell reveal"><div class="pdf-viewer-meta"><div><span>${icon('book')}</span><div><small>${esc(r.kind)}</small><strong>${esc(r.title)}</strong></div></div><span class="pdf-online-badge">Online</span></div><div class="pdf-viewer-actions"><a class="btn-primary tap" href="${driveViewUrl(r.fileId)}" target="_blank" rel="noopener">${icon('book')} Abrir no Drive</a><a class="tool-secondary tap" href="${driveDownloadUrl(r.fileId)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" download>${icon('download')} Baixar PDF</a></div><div class="pdf-frame-wrap"><iframe class="pdf-frame" src="${drivePreviewUrl(r.fileId)}" title="${esc(r.title)}" loading="eager" allow="fullscreen"></iframe><div class="pdf-frame-fallback"><strong>Não conseguiu carregar?</strong><span>Use “Abrir no Drive” acima.</span></div></div><p class="pdf-viewer-note">A visualização usa o Google Drive dentro do PWA e precisa de internet.</p></section><div class="bottom-spacer"></div>`;
 }
 function renderSettingsTool(root){
   root.innerHTML=`<section class="tool-hero settings-hero reveal"><div><p class="section-kicker">SEU JEITO DE USAR</p><h1>Configurações</h1><p>Ajuste padrões do aplicativo sem complicar o manejo.</p></div><span class="tool-hero-icon">${icon('settings')}</span></section><section class="tool-section reveal delay-1"><div class="settings-group"><p class="section-kicker">PERFIL</p><label class="settings-row input-row"><span><strong>Seu nome</strong><small>Usado na saudação da Home</small></span><input id="settingUserName" value="${esc(appSettings.userName)}"></label><label class="settings-row select-row"><span><strong>Meliponário padrão</strong><small>Local aberto primeiro</small></span><select id="settingDefaultApiary">${DATA.apiaries.map(a=>`<option value="${a.id}" ${a.id===appSettings.defaultApiary?'selected':''}>${esc(a.name)}</option>`).join('')}</select></label></div><div class="settings-group"><p class="section-kicker">MANEJO</p><label class="settings-row select-row"><span><strong>Próxima inspeção</strong><small>Intervalo sugerido ao registrar</small></span><select id="settingInspection"><option value="7" ${appSettings.inspectionInterval==='7'?'selected':''}>7 dias</option><option value="15" ${appSettings.inspectionInterval==='15'?'selected':''}>15 dias</option><option value="30" ${appSettings.inspectionInterval==='30'?'selected':''}>30 dias</option><option value="45" ${appSettings.inspectionInterval==='45'?'selected':''}>45 dias</option></select></label><label class="settings-row select-row"><span><strong>Unidade de produção</strong><small>Padrão para novas colheitas</small></span><select id="settingUnit"><option value="ml" ${appSettings.productionUnit==='ml'?'selected':''}>ml</option><option value="L" ${appSettings.productionUnit==='L'?'selected':''}>L</option><option value="g" ${appSettings.productionUnit==='g'?'selected':''}>g</option><option value="kg" ${appSettings.productionUnit==='kg'?'selected':''}>kg</option></select></label></div><div class="settings-group"><p class="section-kicker">EXPERIÊNCIA</p><button class="settings-row toggle-row tap" id="settingNotifications"><span><strong>Lembretes</strong><small>Alertas de manejos e inspeções</small></span><i class="switch ${appSettings.notifications?'on':''}"><b></b></i></button><button class="settings-row toggle-row tap" id="settingHaptics"><span><strong>Resposta ao toque</strong><small>Feedback visual e tátil quando disponível</small></span><i class="switch ${appSettings.haptics?'on':''}"><b></b></i></button></div><button class="settings-save btn-primary tap" id="saveSettings">Salvar alterações</button></section><div class="bottom-spacer"></div>`;
@@ -1926,7 +1926,7 @@ async function exportLocalBackup(){
     await persistNow();
     const exportedAt=new Date().toISOString();
     appSettings.lastBackupAt=exportedAt;
-    const payload={meta:{app:'Meu Meliponário',version:'14.0',schemaVersion:1,exportedAt},settings:plainClone(appSettings),data:plainClone(DATA)};
+    const payload={meta:{app:'Meu Meliponário',version:'14.5',schemaVersion:1,exportedAt},settings:plainClone(appSettings),data:plainClone(DATA)};
     const filename=`meliponario-backup-${exportedAt.slice(0,10)}.meliponario`;
     const file=new File([JSON.stringify(payload,null,2)],filename,{type:'application/json'});
     let shared=false;
@@ -2012,6 +2012,10 @@ bootLocalDatabase().then(ok=>{renderShell();renderHome();renderColoniesPage();bi
   const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
   const swSupported = () => 'serviceWorker' in navigator;
+  const isLocalhost = () => ['localhost','127.0.0.1','[::1]'].includes(location.hostname);
+  const canUsePWA = () => location.protocol === 'https:' || (location.protocol === 'http:' && isLocalhost());
+  const hasManifest = () => !!document.querySelector('link[rel="manifest"]');
+  const isPreview = () => /(?:^|\/)preview\.html$/i.test(location.pathname) || !hasManifest();
 
   function status(){
     return {
@@ -2019,6 +2023,9 @@ bootLocalDatabase().then(ok=>{renderShell();renderHome();renderColoniesPage();bi
       installable: !!deferredPrompt,
       online: navigator.onLine,
       serviceWorker: swSupported(),
+      secureContext: canUsePWA(),
+      manifest: hasManifest(),
+      preview: isPreview(),
       updateAvailable
     };
   }
@@ -2028,7 +2035,7 @@ bootLocalDatabase().then(ok=>{renderShell();renderHome();renderColoniesPage();bi
   }
 
   async function register(){
-    if(!swSupported() || !/^https?:$/.test(location.protocol)) return null;
+    if(!swSupported() || !canUsePWA() || !hasManifest()) return null;
     try{
       registration = await navigator.serviceWorker.register('./service-worker.js',{scope:'./'});
       if(registration.waiting){ updateAvailable=true; dispatch(); }
@@ -2069,6 +2076,10 @@ bootLocalDatabase().then(ok=>{renderShell();renderHome();renderColoniesPage();bi
       global.openSheet(`${global.sheetHeader('APLICATIVO','Já está instalado')}<div class="sheet-tip">O Meu Meliponário está rodando como aplicativo neste aparelho. Seus registros continuam armazenados localmente.</div><button class="btn-primary tap" style="width:100%;height:44px;margin-top:13px" data-close>Fechar</button>`);
       return;
     }
+    if(st.preview || !st.secureContext){
+      global.openSheet(`${global.sheetHeader('INSTALAÇÃO','Esta prévia não é instalável')}<div class="sheet-tip">O arquivo <b>preview.html</b> serve apenas para visualizar o aplicativo. No Chrome, a instalação real exige o projeto publicado em <b>HTTPS</b>, abrindo o <b>index.html</b> com manifest, ícones e Service Worker disponíveis no mesmo endereço.<br><br>Depois de publicar, abra o endereço no Chrome e volte em <b>Mais → Instalar aplicativo</b>.</div><button class="btn-primary tap" style="width:100%;height:44px;margin-top:13px" data-close>Entendi</button>`);
+      return;
+    }
     if(deferredPrompt){
       global.openSheet(`${global.sheetHeader('INSTALAR','Meu Meliponário no celular')}<div class="sheet-tip">Instale o PWA para abrir em tela cheia, usar sem internet e acessar como um aplicativo comum.</div><button class="btn-primary tap" style="width:100%;height:48px;margin-top:13px" id="pwaInstallNow">Instalar aplicativo</button>`);
       const b=document.getElementById('pwaInstallNow'); if(b) b.onclick=async()=>{const ok=await install(); if(ok){global.closeSheet?.();global.toast?.('Aplicativo instalado.');}};
@@ -2078,7 +2089,7 @@ bootLocalDatabase().then(ok=>{renderShell();renderHome();renderColoniesPage();bi
       global.openSheet(`${global.sheetHeader('INSTALAR NO IPHONE','Adicionar à Tela de Início')}<div class="sheet-tip"><b>1.</b> Abra este app no Safari.<br><b>2.</b> Toque em Compartilhar.<br><b>3.</b> Escolha <b>Adicionar à Tela de Início</b>.<br><br>Depois ele abre em tela cheia e continua disponível offline.</div><button class="btn-primary tap" style="width:100%;height:44px;margin-top:13px" data-close>Entendi</button>`);
       return;
     }
-    global.openSheet(`${global.sheetHeader('INSTALAR','Adicionar ao dispositivo')}<div class="sheet-tip">No menu do navegador, procure por <b>Instalar aplicativo</b> ou <b>Adicionar à tela inicial</b>. A opção aparece quando o navegador considera o PWA instalável.</div><button class="btn-primary tap" style="width:100%;height:44px;margin-top:13px" data-close>Entendi</button>`);
+    global.openSheet(`${global.sheetHeader('INSTALAR','Adicionar ao dispositivo')}<div class="sheet-tip">Este endereço já está em contexto compatível, mas o Chrome ainda não liberou o prompt automático. Recarregue a página uma vez e, no menu ⋮ do Chrome, procure por <b>Instalar aplicativo</b> ou <b>Adicionar à tela inicial</b>.</div><button class="btn-primary tap" style="width:100%;height:44px;margin-top:13px" data-close>Entendi</button>`);
   }
 
   function applyUpdate(){
