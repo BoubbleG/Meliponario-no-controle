@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "Meu Meliponário",
+  "short_name": "Meliponário",
+  "description": "Gestão local e offline de meliponários de abelhas sem ferrão.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#fffaf0",
+  "theme_color": "#f4bb3e",
+  "categories": ["productivity", "utilities", "lifestyle"],
+  "icons": [
+    {"src":"./icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"./icons/maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ]
+}
